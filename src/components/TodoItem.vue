@@ -11,7 +11,7 @@
       />
       <span
         class="ml-2 relative z-20"
-        v-bind:class="{ 'line-through': todo.completed }"
+        :class="{ 'line-through': todo.completed }"
       >
         {{ todo.body }}</span
       >

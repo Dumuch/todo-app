@@ -6,7 +6,7 @@
       <div class="mb-4">
         <div class="flex mt-4">
           <input
-            v-on:keyup.enter="addTodo"
+            @keyup.enter="addTodo"
             v-model.trim="todoItem"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker w-full"
             placeholder="What needs to be done?"
