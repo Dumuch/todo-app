@@ -35,13 +35,15 @@
             @change-filter="changeFilter"
           ></component-filter>
         </div>
-        <button
-          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          @click="removeTodoCompleted"
-          v-if="isCompletedTodo"
-        >
-          Clear completed
-        </button>
+        <Transition>
+          <button
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            @click="removeTodoCompleted"
+            v-if="isCompletedTodo"
+          >
+            Clear completed
+          </button>
+        </Transition>
       </div>
     </div>
   </div>
@@ -116,5 +118,15 @@ export default {
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
