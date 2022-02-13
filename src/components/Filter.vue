@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   props: {
     filter: {
@@ -29,19 +31,16 @@ export default {
     },
   },
 
-  data() {
-    return {
-      activeFilter: null,
-    };
+  emits: {
+    "change-filter": (value) => typeof value === "object",
   },
 
-  emits: {
-    "change-filter": (value) => typeof value === "string",
-  },
-  methods: {
-    changeFilter() {
-      this.$emit("change-filter", this.activeFilter);
-    },
+  setup(props, context) {
+    const activeFilter = ref({});
+    const changeFilter = () => {
+      context.emit("change-filter", activeFilter);
+    };
+    return { activeFilter, changeFilter };
   },
 };
 </script>

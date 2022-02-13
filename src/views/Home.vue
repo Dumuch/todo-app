@@ -23,9 +23,7 @@
       </TransitionGroup>
 
       <div class="flex flex-row justify-evenly items-center mt-5 mb-5">
-        <span class="text-sm font-bold">{{
-          getTodoListWithoutFilter.length
-        }}</span>
+        <span class="text-sm font-bold">{{ countTodoListWithoutFilter }}</span>
 
         <div class="flex flex-row justify-evenly">
           <component-filter
@@ -50,61 +48,85 @@
 </template>
 
 <script>
+import { ref, computed, onMounted } from "vue";
+import { useStore } from "vuex";
+
 import TodoItem from "../components/TodoItem.vue";
 import Filter from "../components/Filter.vue";
 
 export default {
   name: "Home",
-  data() {
-    return {
-      countTodo: 0,
-      filterList: [],
-      todoItem: "",
-      activeFilter: null,
-    };
-  },
+
   components: {
     "component-todo-item": TodoItem,
     "component-filter": Filter,
   },
 
-  mounted() {
-    this.filterList = this.$store.getters.getFilterList;
-  },
+  setup() {
+    const store = useStore();
 
-  computed: {
-    getTodoList() {
-      return this.$store.getters.getTodoListByFilter(this.activeFilter);
-    },
-    isCompletedTodo() {
-      return this.getTodoListWithoutFilter.find(
-        (todo) => todo.completed === true
-      )
-        ? true
-        : false;
-    },
-    getTodoListWithoutFilter() {
-      return this.$store.getters.getTodoList;
-    },
-  },
+    const countTodo = ref(0);
+    const filterList = ref([]);
+    const todoItem = ref(null);
+    const activeFilter = ref("");
 
-  methods: {
-    addTodo() {
-      this.$store.dispatch("addTodo", { todo: this.todoItem });
-      this.todoItem = "";
-    },
-    changeFilter(value) {
-      this.activeFilter = value;
-      this.$store.dispatch("changeFilter", { filter: this.activeFilter });
-    },
+    onMounted(() => {
+      filterList.value = store.getters.getFilterList;
+    });
 
-    changeTodo(value) {
-      this.$store.dispatch("changeTodo", { todo: value });
-    },
+    const addTodo = () => {
+      store.dispatch("addTodo", { todo: todoItem.value });
+      todoItem.value = null;
+    };
 
-    removeTodoCompleted() {
-      this.$store.dispatch("removeCompletedTodo");
-    },
+    const changeFilter = (value) => {
+      activeFilter.value = value.value;
+      store.dispatch("changeFilter", { filter: activeFilter.value });
+    };
+
+    const changeTodo = (id) => {
+      store.dispatch("changeTodo", { todo: id });
+    };
+
+    const removeTodoCompleted = () => {
+      store.dispatch("removeCompletedTodo");
+    };
+
+    const getTodoList = computed(() => {
+      return store.getters.getTodoListByFilter(activeFilter.value);
+    });
+
+    const getTodoListWithoutFilter = computed(() => {
+      return store.getters.getTodoList;
+    });
+
+    const isCompletedTodo = computed(() => {
+      const todoList = getTodoListWithoutFilter.value;
+      console.log(
+        todoList.find((todo) => todo.completed === true) ? true : false
+      );
+      return todoList.find((todo) => todo.completed === true) ? true : false;
+    });
+
+    const countTodoListWithoutFilter = computed(() => {
+      return getTodoListWithoutFilter.value.length;
+    });
+
+    return {
+      countTodo,
+      filterList,
+      todoItem,
+      activeFilter,
+
+      addTodo,
+      changeFilter,
+      changeTodo,
+      removeTodoCompleted,
+
+      getTodoList,
+      isCompletedTodo,
+      countTodoListWithoutFilter,
+    };
   },
 };
 </script>

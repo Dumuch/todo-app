@@ -82,7 +82,9 @@ export default createStore({
     },
 
     changeFilter(context, data) {
-      context.commit("changeFilterFromFilterList", { value: data.filter });
+      context.commit("changeFilterFromFilterList", {
+        value: data.filter,
+      });
     },
   },
   modules: {},

@@ -35,10 +35,12 @@ export default {
     "change-todo": (value) => typeof value === "number",
   },
 
-  methods: {
-    completedTodo() {
-      this.$emit("change-todo", this.todo.id);
-    },
+  setup(props, context) {
+    const completedTodo = () => {
+      context.emit("change-todo", props.todo.id);
+    };
+
+    return { completedTodo };
   },
 };
 </script>
