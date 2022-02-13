@@ -102,9 +102,6 @@ export default {
 
     const isCompletedTodo = computed(() => {
       const todoList = getTodoListWithoutFilter.value;
-      console.log(
-        todoList.find((todo) => todo.completed === true) ? true : false
-      );
       return todoList.find((todo) => todo.completed === true) ? true : false;
     });
 
