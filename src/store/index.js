@@ -4,7 +4,7 @@ import { todoList } from "./modules/todoList";
 
 export default createStore({
   modules: {
-    a: todoList,
-    b: filter,
+    todo: todoList,
+    filter: filter,
   },
 });
